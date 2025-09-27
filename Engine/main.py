@@ -66,13 +66,23 @@ class Game:
         return self.moves_count >= self.n * self.n
 
     def print_board(self):
-        print("  " + " ".join(str(i) for i in range(self.n)))
-        for i in range(self.n):
-            row = str(i) + " "
-            for j in range(self.n):
-                row += self.board[i][j] + " "
-            print(row)
+        n = self.n
+        # Ширина ячейки — поддержка N до 99
+        cell_width = 2
+        header = " " * (len(str(n)) + 1) + "".join(f"{j:>{cell_width}} " for j in range(n))
+        separator = " " * (len(str(n)) + 1) + "-" * (n * (cell_width + 1) + 1)
 
+        print(header)
+        print(separator)
+
+        for i in range(n):
+            row = f"{i:>{len(str(n))}} |"
+            for j in range(n):
+                cell = self.board[i][j]
+                # Можно заменить '.' на '·' или ' ' для красоты
+                display = cell if cell != '.' else '·'
+                row += f"{display:>{cell_width}} "
+            print(row)
     def get_ai_move(self):
         from ai import get_best_move
         move = get_best_move(self)
