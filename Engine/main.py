@@ -94,7 +94,11 @@ def main():
     print("Square Game. Type HELP for commands.")
     while True:
         try:
-            command_line = input().strip()
+            if(game is not None and game.get_player_type() == 'comp'):
+                mov = game.get_ai_move()
+                command_line = "MOVE " + str(mov[0]) + "," + str(mov[1])
+            else:
+                command_line = input().strip()
             if not command_line:
                 continue
 
@@ -192,6 +196,7 @@ def main():
                             color = game.get_player_color()
                             game.make_move(x, y, color)
                             print(f"{color} ({x}, {y})")
+                            game.print_board()
                             if game.game_over:
                                 if game.winner:
                                     print(f"Game finished. {game.winner} wins!")
@@ -201,7 +206,6 @@ def main():
                             elif game.is_full():
                                 print("Game finished. Draw")
                                 game = None
-                        game.print_board()
             elif cmd == "EXIT":
                 print("Goodbye!")
                 break
