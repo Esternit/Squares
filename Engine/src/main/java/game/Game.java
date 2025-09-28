@@ -3,7 +3,7 @@ package game;
 import ai.AI;
 
 public class Game {
-    private final Board board;
+    private Board board;
     private final Player[] players = new Player[2];
     private int currentPlayerIndex = 0;
     private boolean gameOver = false;
@@ -82,5 +82,9 @@ public class Game {
 
     public boolean isGameOver() {
         return this.gameOver;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
     }
 }

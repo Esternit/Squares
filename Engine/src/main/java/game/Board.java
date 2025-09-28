@@ -135,6 +135,18 @@ public class Board {
         }
     }
 
+    public void setGrid(char[][] newGrid) {
+        for (int i = 0; i < size; i++) {
+            System.arraycopy(newGrid[i], 0, grid[i], 0, size);
+        }
+        moveCount = 0;
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (grid[i][j] != '.') moveCount++;
+            }
+        }
+    }
+
     private static class Point {
         final int x;
         final int y;
