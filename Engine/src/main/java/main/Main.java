@@ -3,7 +3,7 @@ package main;
 
 import game.Game;
 import java.util.Scanner;
-import utils.InputParser;
+import util.InputParser;
 
 public class Main {
     public static void main(String[] args) {

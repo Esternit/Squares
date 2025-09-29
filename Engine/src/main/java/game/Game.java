@@ -68,6 +68,10 @@ public class Game {
         return this.players[this.currentPlayerIndex].color();
     }
 
+    public char getNextPlayerColor() {
+        return this.players[1 - this.currentPlayerIndex].color();
+    }
+
     public Board getBoard() {
         return this.board;
     }

@@ -6,8 +6,7 @@ import game.Game;
 import game.Player;
 import game.PlayerType;
 import org.springframework.web.bind.annotation.*;
-import web.dto.BoardDto;
-import web.dto.SimpleMoveDto;
+import web.dto.*;
 
 @RestController
 @RequestMapping("/api")
@@ -54,5 +53,40 @@ public class GameController {
             }
         }
         return grid;
+    }
+
+    @PostMapping("/new-game")
+    public BoardStateDto newGame(
+            @RequestBody GameRequestDto request) {
+
+        Player user = new Player(PlayerType.USER, request.getPlayerColor().charAt(0));
+        Player ai = new Player(PlayerType.COMP, request.getPlayerColor().charAt(0) == 'W' ? 'B' : 'W');
+        Game game = new Game(request.getSize(), user, ai);
+
+        return new BoardStateDto(game);
+    }
+
+    @PostMapping("/make-move")
+    public BoardStateDto makeMove(
+            @RequestBody MoveDto request) {
+
+        char[][] grid = parseData(request.getData(), request.getSize());
+        Board board = new Board(request.getSize());
+        board.setGrid(grid);
+
+        char color = request.getColor().charAt(0);
+        Player player = new Player(PlayerType.USER, color);
+        Player opponent = new Player(PlayerType.COMP, (color == 'w' || color == 'W') ? 'b' : 'w');
+        Game game = new Game(request.getSize(), player, opponent);
+        game.setBoard(board);
+        game.makeMove(request.getX(), request.getY());
+
+        int[] move = AI.getBestMove(game);
+
+        if (move != null) {
+            game.makeMove(move[0], move[1]);
+        }
+
+        return new BoardStateDto(game);
     }
 }

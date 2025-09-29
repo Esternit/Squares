@@ -1,6 +1,7 @@
 package web.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import game.Game;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "Класс DTO, описывающий состояние игры")

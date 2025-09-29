@@ -1,4 +1,4 @@
-package utils;
+package util;
 
 import game.Game;
 import game.Player;

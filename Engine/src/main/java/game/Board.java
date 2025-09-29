@@ -147,6 +147,10 @@ public class Board {
         }
     }
 
+    public char[][] getGrid() {
+        return grid;
+    }
+
     private static class Point {
         final int x;
         final int y;
