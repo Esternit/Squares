@@ -81,6 +81,10 @@ public class GameController {
         game.setBoard(board);
         game.makeMove(request.getX(), request.getY());
 
+        if(game.isGameOver()){
+            return new BoardStateDto(game);
+        }
+
         int[] move = AI.getBestMove(game);
 
         if (move != null) {
@@ -88,5 +92,14 @@ public class GameController {
         }
 
         return new BoardStateDto(game);
+    }
+
+    @GetMapping("/is-game-over")
+    public boolean isGameOver(
+            @RequestBody GameRequestDto request) {
+        Player user = new Player(PlayerType.USER, request.getPlayerColor().charAt(0));
+        Player ai = new Player(PlayerType.COMP, request.getPlayerColor().charAt(0) == 'W' ? 'B' : 'W');
+        Game game = new Game(request.getSize(), user, ai);
+        return game.isGameOver();
     }
 }
