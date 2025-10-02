@@ -71,16 +71,9 @@ npm run dev
 
 ```bash
 cd Engine
-mvn compile exec:java -Dexec.mainClass="main.Main"
-```
-
-Или, если собран JAR:
-
-```bash
-mvn package -DskipTests
+mvn clean install
 java -jar target/square-game-1.0-console.jar
 ```
-
 ---
 
 ## Сборка проекта
@@ -88,7 +81,7 @@ java -jar target/square-game-1.0-console.jar
 ### Бэкенд
 ```bash
 cd Engine
-mvn clean package -DskipTests
+mvn clean install
 ```
 → Генерирует:
 - `square-game-1.0-web.jar` — веб-версия
