@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import axios from 'axios';
 import { BoardStateDto, GameRequestDto, MoveDto, PlayerColor } from '../types/game';
 
-const API_BASE = '/api';
+const API_BASE = 'http://localhost:8080/api';
 
 interface GameState {
   board: string[][];
@@ -15,7 +15,6 @@ interface GameState {
 
   startNewGame: (size: number, userColor: PlayerColor) => Promise<void>;
   makeMove: (x: number, y: number) => Promise<void>;
-  checkWin: (board: string[][], color: string) => boolean;
 }
 
 export const useGame = create<GameState>((set, get) => ({
@@ -54,7 +53,7 @@ export const useGame = create<GameState>((set, get) => ({
     }
   },
 
-  makeMove: async (x, y) => {
+  makeMove: async (x: number, y) => {
     const state = get();
     if (state.status !== 'playing' || state.loading) return;
 
@@ -73,40 +72,23 @@ export const useGame = create<GameState>((set, get) => ({
 
     try {
       const res = await axios.post<BoardStateDto>(`${API_BASE}/make-move`, moveDto);
-      const newBoard = res.data.data.map(row => 
-  row.split('').map(c => c === '.' ? '' : c)
-);
 
-      if (get().checkWin(newBoard, color.toLowerCase())) {
-        set({ status: 'won', winner: color, board: newBoard, loading: false });
-        return;
+      const newBoard = res.data.data.map(row => row.split('').map(c => c === '.' ? '' : c));
+      
+      if (res.data.gameOver) {
+        if (res.data.winner === 'draw') {
+          set({ status: 'draw', board: newBoard, loading: false });
+        } else if (res.data.winner === 'W' || res.data.winner === 'B') {
+          set({ status: 'won', winner: res.data.winner as PlayerColor, board: newBoard, loading: false });
+        } else {
+          set({ status: 'draw', board: newBoard, loading: false });
+        }
+      } else {
+        set({ board: newBoard, loading: false });
       }
-
-      const isFull = newBoard.flat().every(cell => cell !== '');
-      if (isFull) {
-        set({ status: 'draw', board: newBoard, loading: false });
-        return;
-      }
-
-      const aiColor = color === 'W' ? 'B' : 'W';
-      if (get().checkWin(newBoard, aiColor.toLowerCase())) {
-        set({ status: 'won', winner: aiColor, board: newBoard, loading: false });
-        return;
-      }
-
-      set({
-        board: newBoard,
-        currentPlayer: color,
-        loading: false,
-      });
     } catch (err) {
       console.error('Move failed', err);
       set({ loading: false });
     }
-  },
-
-  checkWin: (board, color) => {
-    const n = board.length;
-    return false;
-  },
+  }
 }));

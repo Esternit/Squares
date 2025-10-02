@@ -29,4 +29,6 @@ export interface SimpleMoveDto {
 export interface BoardStateDto {
   size: number;
   data: string[];
+  gameOver: boolean;
+  winner: string | null;
 }

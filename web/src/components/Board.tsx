@@ -1,6 +1,6 @@
 "use client";
 
-import { useGame } from "@/hooks/useGame";
+import { useGame } from "@/src/hooks/useGame";
 import { Square } from "./Square";
 
 export function Board() {
