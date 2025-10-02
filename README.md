@@ -9,7 +9,6 @@
 
 - **`/Engine`** — Spring Boot бэкенд (REST API + логика игры)
 - **`/web`** — Next.js фронтенд (React + shadcn/ui)
-- **`/console`** — консольная версия игры (запускается только через Maven)
 
 ---
 
